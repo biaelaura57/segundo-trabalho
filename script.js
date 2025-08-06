@@ -1,58 +1,60 @@
-const caixaPrincipal = document.querySelector('.caixa-principal');
-const caixaPerguntas = document.querySelector('.caixa-perguntas');
-const caixaAlternativas = document.querySelector('.caixa-alternativas');
-const caixaResultado = document.querySelector('.caixa-resultado');
-const textoResultado = document.querySelector('.texto-resultado');
+const caixaPrincipal = document.querySelector(".caixa-principal");
+const caixaPerguntas = document.querySelector(".caixa-perguntas");
+const caixaAlternativas = document.querySelector(".caixa-alternativas");
+const caixaResultado = document.querySelector(".caixa-resultado");
+const textoResultado = document.querySelector(".texto-resultado");
 
 const perguntas = [
     {
-        enunciado: "Assim que saiu da escola você se depara com uma nova tecnologia, um chat que consegue responder todas as dúvidas que uma pessoa pode ter, ele também gera imagens e áudios hiper-realistas. Qual o primeiro pensamento?",
-        alternativas: [
-            {
-                texto: "Isso é assustador!",
-                afirmacao: "afirmacao"
-            },
-            {
-                texto: "Isso é maravilhoso!",
-                afirmacao: "afirmacao"
-            }
-        ]
-    }, // <--- VÍRGULA ADICIONADA AQUI
+        enunciado: "Enunciado 1: Você já utilizou IA?",
+        alternativas: ["sim", "não"],
+    },
     {
-        enunciado: "enunciado 2",
-        alternativas: [
-            {
-                texto: "alternativa 1!",
-                afirmacao: "afirmacao"
-            },
-            {
-                texto: "alternativa 2",
-                afirmacao: "afirmacao"
-            }
-        ]
+        enunciado: "Enunciado 2: Você ve benefícios usando IA na escola?",
+        alternativas: ["Sim", "Não"],
+    },
+    {
+        enunciado: "Você acredita que ela será utilizada cada vez mais?",
+        alternativas: ["Sim", "Não"],
     }
 ];
 
-// VARIÁVEIS MOVIDAS PARA FORA DA ARRAY
 let atual = 0;
 let perguntaAtual;
 
 function mostraPergunta() {
     perguntaAtual = perguntas[atual];
+
     caixaPerguntas.textContent = perguntaAtual.enunciado;
-    // limpa as alternativas anteriores antes de adicionar as novas
-    caixaAlternativas.innerHTML = ``;
-    mostraAlternativas();
+
+    // Limpa alternativas anteriores
+    caixaAlternativas.innerHTML = "";
+
+    // Cria as alternativas como botões
+    perguntaAtual.alternativas.forEach((alternativa, index) => {
+        const botao = document.createElement("button");
+        botao.textContent = alternativa;
+        botao.classList.add("alternativa");
+        botao.addEventListener("click", () => {
+            atual++;
+            if (atual < perguntas.length) {
+                mostraPergunta();
+            } else {
+                mostraResultado();
+            }
+        });
+        caixaAlternativas.appendChild(botao);
+    });
 }
 
-function mostraAlternativas() {
-    for (const alternativa of perguntaAtual.alternativas) {
-        // ASPAS RETAS NO LUGAR DAS CURVAS
-        const botaoAlternativa = document.createElement("button");
-        botaoAlternativa.textContent = alternativa.texto;
-        caixaAlternativas.appendChild(botaoAlternativa);
-    }
+function mostraResultado() {
+    caixaPerguntas.style.display = "none";
+    caixaAlternativas.style.display = "none";
+    caixaResultado.style.display = "block";
+    textoResultado.textContent = "Obrigado por responder! Você decidiu o futuro da IA.";
 }
 
-// Inicia a exibição da primeira pergunta
+// Começa o quiz
 mostraPergunta();
+
+
